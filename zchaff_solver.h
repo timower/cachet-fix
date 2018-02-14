@@ -508,7 +508,7 @@ public:
 	// some functions added by sang
 	//void set_var_weight(vector<double> &);
 	void set_BN_node(int);
-	void set_var_weight(vector<double> *);
+	void set_var_weight(vector<double> *, vector<double> *);
 	void set_vgo(vector< set<int> >);
 	void set_static_heuristic(bool);
 	void set_cache_size(unsigned);

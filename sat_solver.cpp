@@ -56,7 +56,8 @@ void read_cnf(SAT_Manager mng, char * filename )
     char word_buffer[MAX_WORD_LENGTH];
     set<int> clause_vars;
     set<int> clause_lits;
-	vector <double> var_weight;
+	vector <double> var_weight_pos;
+	vector <double> var_weight_neg;
     int line_num = 0;
 	bool beforeP = true;
 
@@ -95,9 +96,12 @@ void read_cnf(SAT_Manager mng, char * filename )
 		exit(3);
 	    }
 	    SAT_SetNumVariables(mng, var_num); // first element not used.
-		var_weight.resize(var_num + 1);		// for weighted counting
-		for (int i = 1; i < var_weight.size(); ++i)	// all weight 0.5 by default
-			var_weight[i] = 0.5;
+		var_weight_pos.resize(var_num + 1);		// for weighted counting
+		var_weight_neg.resize(var_num + 1);
+		for (int i = 1; i < var_weight_pos.size(); ++i)	// all weight 0.5 by default
+			var_weight_pos[i] = 0.5;
+		for (int i = 1; i < var_weight_neg.size(); ++i)
+			var_weight_neg[i] = 0.5;
 	}
 	else if (line_buffer[0] == 'w')		// added by sang
 	{
@@ -133,10 +137,26 @@ void read_cnf(SAT_Manager mng, char * filename )
 		}
 		*wp = '\0';                                 // terminate string
 		//assert (strlen(word_buffer) != 0);
-		double weight = atof (word_buffer);
+		double weight_pos = atof (word_buffer);
+
+		// skip all spaces after wweight_pos
+		while (*lp && ((*lp == ' ') || (*lp == '\t')))
+		{
+		    lp++;
+		}
+
+		// get the neg weight
+		wp = word_buffer;
+		while (*lp && (*lp != ' ') && (*lp != '\t') && (*lp != '\n'))
+		{
+		    *(wp++) = *(lp++);
+		}
+		*wp = '\0';                                 // terminate string
+		double weight_neg = atof(word_buffer);
 
 		// set the weight of var_idx
-		var_weight[var_idx] = weight;
+		var_weight_pos[var_idx] = weight_pos;
+		var_weight_neg[var_idx] = weight_neg;
 	}
 	else {                             // Clause definition or continuation
 	    char *lp = line_buffer;
@@ -204,7 +224,7 @@ void read_cnf(SAT_Manager mng, char * filename )
     clause_lits.clear();
     clause_vars.clear();
 
-	SAT_SetVarWeight(mng, & var_weight);
+	SAT_SetVarWeight(mng, & var_weight_pos, & var_weight_neg);
 }
 
 

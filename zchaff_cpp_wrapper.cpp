@@ -63,11 +63,12 @@ Following are wrapper functions for C/C++ callers.
 }
 
 //void SAT_SetVarWeight(SAT_Manager mng, vector <double> & var_weight)
-void SAT_SetVarWeight(SAT_Manager mng, void * weight)
+void SAT_SetVarWeight(SAT_Manager mng, void * weight_pos, void * weight_neg)
 {
 	CSolver * solver = (CSolver*) mng;
-	vector<double> * var_weight = (vector<double> *) weight;
-	solver->set_var_weight(var_weight);
+	vector<double> * var_weight_pos = (vector<double> *) weight_pos;
+    vector<double> * var_weight_neg = (vector<double> *) weight_neg;
+	solver->set_var_weight(var_weight_pos, var_weight_neg);
 }
 
 void SAT_SetCacheSize(SAT_Manager mng, unsigned cache_size)

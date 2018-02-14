@@ -158,7 +158,7 @@ SAT_Manager SAT_InitManager(void);
 
 //void SAT_SetVarWeight(SAT_Manager mng, vector<double> &);
 
-void SAT_SetVarWeight(SAT_Manager mng, void *);
+void SAT_SetVarWeight(SAT_Manager mng, void *, void *);
 
 void SAT_SetBNNodes(SAT_Manager mng, int);
 

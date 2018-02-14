@@ -197,18 +197,19 @@ void CSolver::set_BN_node(int BN_nodes)
 	original_BN_nodes = BN_nodes;
 }
 
-void CSolver::set_var_weight(vector<double> * weight)
+void CSolver::set_var_weight(vector<double> * weight_pos, vector<double> * weight_neg)
 {
-	vector<double> var_weight = * weight;
+	vector<double> var_weight_pos = * weight_pos;
+	vector<double> var_weight_neg = * weight_neg;
 	for (int i = variables().size()-1; i >= 1; --i)
 	{
 		CVariable & var = variable(i);
 		//if (var_weight[i] > -0.5)	// initialized to -1, > -0.5 means set to some positive value
-		var.set_weight(var_weight[i]);
+		var.set_weight(var_weight_pos[i], var_weight_neg[i]);
 		//else if (original_BN_nodes == 0)	// not a BN CNF, all var weights should be set to 0.5
 		//	var.set_weight(0.5);
 
-		if (var.pos_weight + var.neg_weight < 1.5)
+		if (var.pos_weight + var.neg_weight < 2)
 			var.internal = false;	// add a tag for a component with only interal nodes
 		else
 			var.internal = true;	// an internal node has a weight sum of 2

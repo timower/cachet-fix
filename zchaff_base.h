@@ -468,15 +468,10 @@ public:
 	return score(0) + score(1);		// changed from max individual score to combined sum score
     }
 
-	void set_weight(double weight)
+	void set_weight(double weight_pos, double weight_neg)
 	{
-		if (weight < -0.5)	// -1 means an internal node with weight pos-1 and neg-1
-			pos_weight = neg_weight = 1;
-		else
-		{
-			pos_weight = weight;
-			neg_weight = 1 - weight;
-		}
+		pos_weight = weight_pos;
+		neg_weight = weight_neg;
 	}
 
     int & var_score_pos(void) {
